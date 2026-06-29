@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Email Repair Shop - Time Prepositions</title>
+    
+    <!-- Tailwind CSS for Responsive Layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;600;700;900&display=swap');
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #e0f2fe; /* Light sky blue theme */
+        }
+
+        h1, h2, h3, .brand-font {
+            font-family: 'Fredoka One', cursive;
+        }
+
+        /* Envelope card glow transitions */
+        .email-card {
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .active-input-highlight {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+            background-color: #f0f9ff !important;
+        }
+
+        .solved-input-highlight {
+            border-color: #10b981 !important;
+            color: #047857 !important;
+            background-color: #ecfdf5 !important;
+            font-weight: 900;
+        }
+
+        /* SVG animations */
+        @keyframes clockRing {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(8deg); }
+        }
+        .animate-ring {
+            animation: clockRing 0.15s infinite alternate;
+        }
+
+        @keyframes steamFloat {
+            0% { transform: translateY(0) scaleX(1); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-15px) scaleX(1.2); opacity: 0; }
+        }
+        .animate-steam {
+            animation: steamFloat 1.8s infinite ease-in-out;
+        }
+
+        @keyframes wheelsRoll {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-wheel {
+            transform-origin: center;
+            animation: wheelsRoll 1s infinite linear;
+        }
+
+        /* Shake animation for typing errors */
+        @keyframes errorWobble {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+        .shake-effect {
+            animation: errorWobble 0.25s ease-in-out;
+        }
+
+        /* Wave bars for TTS pronunciation model */
+        .wave-bar {
+            animation: waveMotion 1s ease-in-out infinite alternate;
+            animation-play-state: paused;
+        }
+        .wave-bar:nth-child(2) { animation-delay: 0.15s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.3s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.45s; }
+
+        @keyframes waveMotion {
+            0% { height: 4px; }
+            100% { height: 22px; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between pb-6">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white shadow-sm border-b border-sky-100 py-3 px-4 z-10">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+                <span class="text-3xl">📧</span>
+                <div>
+                    <h1 class="text-xl md:text-2xl text-sky-900 tracking-wide">The Email Repair Shop</h1>
+                    <p class="text-xs text-sky-600 font-bold">Unit 6: Time & Routines • Preposition Typer</p>
+                </div>
+            </div>
+
+            <!-- Email Repairs Completed bar -->
+            <div class="flex items-center gap-3 bg-sky-50 border border-sky-100 px-4 py-1.5 rounded-full">
+                <span class="text-xs font-black text-sky-700">Prepositions Fixed:</span>
+                <div class="relative w-24 bg-sky-200 h-2.5 rounded-full overflow-hidden">
+                    <div id="progressBar" class="bg-sky-500 h-full w-0 transition-all duration-300"></div>
+                </div>
+                <span id="progressLabel" class="text-xs font-black text-sky-800">0 / 9</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Grid -->
+    <main class="max-w-5xl mx-auto px-4 py-4 w-full flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        
+        <!-- LEFT PANEL: Dynamic Mail Client Frame (7 Columns) -->
+        <section class="lg:col-span-7 bg-white rounded-3xl border border-sky-100 shadow-md flex flex-col overflow-hidden min-h-[380px]">
+            <!-- Mail Client Header Bar -->
+            <div class="bg-slate-100 border-b border-slate-200 px-4 py-3 flex items-center justify-between">
+                <div class="flex gap-1.5 select-none">
+                    <span class="w-3 h-3 rounded-full bg-red-400 inline-block"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block"></span>
+                    <span class="w-3 h-3 rounded-full bg-green-400 inline-block"></span>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-black text-slate-400 uppercase">Interactive Email Composer</span>
+                </div>
+
+                <!-- Text flow controller select -->
+                <div class="flex items-center gap-2">
+                    <label for="emailSelector" class="text-[10px] font-black text-slate-400 uppercase">Switch Text:</label>
+                    <select id="emailSelector" onchange="switchEmailContext(this.value)" class="bg-white border border-slate-200 text-xs font-bold px-2 py-0.5 rounded outline-none text-slate-700">
+                        <option value="sandra">Sandra's Routine (P. 74)</option>
+                        <option value="hamid">Hamid's Email (P. 78)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Mail Envelope Body containing gaps -->
+            <div id="emailPaperBody" class="p-6 md:p-8 flex-1 flex flex-col justify-between overflow-y-auto">
+                <div class="border-b border-slate-100 pb-3 mb-4 text-xs font-semibold text-slate-400 flex flex-col gap-1.5">
+                    <p><span class="font-black text-slate-400 uppercase">To:</span> <span class="text-sky-600" id="toMailLabel">angela@cup.org</span></p>
+                    <p><span class="font-black text-slate-400 uppercase">Subject:</span> <span class="text-slate-600" id="subjectMailLabel">My Daily Schedule</span></p>
+                </div>
+
+                <!-- Live fillable passage container -->
+                <div id="passageInteractiveSandbox" class="text-sm md:text-base leading-loose text-slate-700 font-semibold tracking-wide pr-2">
+                    <!-- Blank sentences load here -->
+                </div>
+
+                <!-- Typewriter status indicator -->
+                <div class="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-bold">
+                    <span class="flex items-center gap-1.5"><span>⌨️</span> <span>Type directly into the empty boxes!</span></span>
+                    <span class="italic text-[10px]" id="levelNameIndicator">Sandra's Schedule</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT PANEL: SVG Cartoon Animator & Fallback Word Bank (5 Columns) -->
+        <section class="lg:col-span-5 flex flex-col justify-between gap-4">
+            
+            <!-- SVG Cartoon Animator Screen -->
+            <div class="bg-white p-4 rounded-3xl border border-sky-100 shadow-md h-48 overflow-hidden relative flex flex-col justify-between">
+                <span class="bg-blue-100 text-blue-800 font-black text-[9px] px-2.5 py-0.5 rounded-full uppercase tracking-wider absolute top-3 left-3 z-30">🎬 Real-Time Schedule</span>
+                
+                <div id="animationSandbox" class="absolute inset-0 w-full h-full flex items-center justify-center bg-slate-50">
+                    <!-- SVGs animates to match schedule actions dynamically -->
+                </div>
+            </div>
+
+            <!-- Prepositions Tap Assist & Controls panel -->
+            <div id="controlDeck" class="bg-white p-5 rounded-3xl border border-sky-100 shadow-md flex-1 flex flex-col justify-between">
+                
+                <div class="text-center">
+                    <span class="text-xs font-black text-slate-400 uppercase tracking-widest block">Oral Speech practice</span>
+                    
+                    <div class="flex items-center justify-center gap-3 mt-3">
+                        <button onclick="speakCompletedClause()" class="bg-sky-100 hover:bg-sky-200 text-sky-800 font-extrabold px-4 py-2.5 rounded-xl flex items-center gap-2 text-xs shadow-sm transition-all active:scale-95">
+                            🔊 Read Active Sentence
+                        </button>
+                        
+                        <!-- Sound wave bars -->
+                        <div class="flex items-end gap-1 h-5 justify-center">
+                            <div class="w-0.5 bg-sky-500 rounded-full wave-bar" style="height: 4px;"></div>
+                            <div class="w-0.5 bg-sky-500 rounded-full wave-bar" style="height: 12px;"></div>
+                            <div class="w-0.5 bg-sky-500 rounded-full wave-bar" style="height: 8px;"></div>
+                            <div class="w-0.5 bg-sky-500 rounded-full wave-bar" style="height: 16px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Word Bank Assist Drawer (Provides comfortable tapping support on touchscreens) -->
+                <div class="my-4 border-t border-b border-slate-100 py-4 text-center">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Word Bank Assist (Tap to Fill)</span>
+                    <p class="text-[10px] text-slate-400 font-bold mb-3">Tapping a word fills the active yellow box automatically!</p>
+                    <div class="flex justify-center gap-3">
+                        <button onclick="fillActiveInputFromBank('at')" class="brand-font bg-white hover:bg-slate-50 border-2 border-slate-200 text-slate-700 font-black px-5 py-2.5 rounded-xl shadow-sm text-sm active:scale-95 transition-all">at</button>
+                        <button onclick="fillActiveInputFromBank('in')" class="brand-font bg-white hover:bg-slate-50 border-2 border-slate-200 text-slate-700 font-black px-5 py-2.5 rounded-xl shadow-sm text-sm active:scale-95 transition-all">in</button>
+                        <button onclick="fillActiveInputFromBank('on')" class="brand-font bg-white hover:bg-slate-50 border-2 border-slate-200 text-slate-700 font-black px-5 py-2.5 rounded-xl shadow-sm text-sm active:scale-95 transition-all">on</button>
+                    </div>
+                </div>
+
+                <!-- Guidance Info and manual checks bypass -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex justify-between items-center text-xs font-semibold text-slate-400">
+                        <button onclick="clearCurrentEmailInputs()" class="text-red-400 hover:text-red-600 transition-colors uppercase text-[10px] font-black">Clear Gaps ✕</button>
+                        
+                        <div class="flex items-center gap-1">
+                            <label for="speedSelect" class="text-[9px] font-black text-slate-400 uppercase">Tempo:</label>
+                            <select id="speedSelect" onchange="adjustSpeechRate(this.value)" class="bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold px-1.5 py-0.5 rounded outline-none">
+                                <option value="0.7">0.7x (Slow)</option>
+                                <option value="0.85" selected>0.85x</option>
+                                <option value="1.0">1.0x</option>
+                            </select>
+                        </div>
+
+                        <button onclick="forceSolveActiveInput()" class="text-blue-500 hover:text-blue-700 transition-colors uppercase text-[10px] font-black">Auto-Fill Box ✔️</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Success Completion screen modal -->
+    <div id="victoryModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-[32px] p-8 max-w-sm w-full text-center shadow-2xl border border-slate-100 transform scale-95 transition-all">
+            <span class="text-7xl">📬</span>
+            <h3 class="text-3xl text-emerald-600 mt-4 mb-2">Great Repairs!</h3>
+            <p class="text-slate-600 font-bold text-base mb-6">You verified all temporal prepositions correctly and successfully sent out the finished email schedule log!</p>
+            <button onclick="restartGame()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-lg shadow-blue-200 transition-all active:scale-95 text-lg">Fix Another Email</button>
+        </div>
+    </div>
+
+    <!-- Active Gameplay Logic Script -->
+    <script>
+        // Interactive level passages database
+        const emailsDatabase = {
+            sandra: {
+                targetMail: "angela@cup.org",
+                subjectMail: "My Daily Schedule",
+                levelLabel: "Sandra's Schedule",
+                gaps: [
+                    { id: 0, prefix: "I love my new house. There is a school on my street. My husband works at the community center. He walks to work.", suffix: " Monday,", correct: "on", size: 3, speech: "On Monday", simType: "morning-bell" },
+                    { id: 1, prefix: "I usually get up", suffix: " 7:00", correct: "at", size: 3, speech: "I usually get up at seven o'clock", simType: "morning-bell" },
+                    { id: 2, prefix: "in the morning.", suffix: " 8:00, I leave for work. I eat lunch late", correct: "at", size: 3, speech: "At eight o'clock I leave for work", simType: "leaving-work" },
+                    { id: 3, prefix: "in the afternoon because I am so busy. I leave for home", suffix: " 6:00", correct: "at", size: 3, speech: "I leave for home at six o'clock", simType: "get-home" },
+                    { id: 4, prefix: "in the evening.", suffix: " Saturday, I go to my friend's house.", correct: "on", size: 3, speech: "On Saturday, I go to my friend's house", simType: "get-home" },
+                    { id: 5, prefix: "", suffix: " Sunday morning, I spend time with my wife and children.", correct: "on", size: 3, speech: "On Sunday morning, I spend time with my family", simType: "coffee-cup" }
+                ]
+            },
+            hamid: {
+                targetMail: "msmith@cup.org",
+                subjectMail: "My Daily Schedule",
+                levelLabel: "Hamid's Schedule",
+                gaps: [
+                    { id: 0, prefix: "Let me tell you about my daily schedule.", suffix: " Monday,", correct: "on", size: 3, speech: "On Monday,", simType: "morning-bell" },
+                    { id: 1, prefix: "I usually get up", suffix: " 6:30", correct: "at", size: 3, speech: "I usually get up at six thirty", simType: "morning-bell" },
+                    { id: 2, prefix: "in the morning. I eat breakfast and get dressed.", suffix: " 8:00, I go to work. I work at a department store. I eat lunch", correct: "at", size: 3, speech: "At eight o'clock, I go to work", simType: "leaving-work" },
+                    { id: 3, prefix: "", suffix: " 12:30", correct: "at", size: 3, speech: "I eat lunch at twelve thirty", simType: "eating-lunch" },
+                    { id: 4, prefix: "in the afternoon. I take a break", suffix: " 3:30. I finish work", correct: "at", size: 3, speech: "I take a break at three thirty", simType: "coffee-cup" },
+                    { id: 5, prefix: "", suffix: " 5:00. I go to a fast-food restaurant or a coffee shop for dinner. I get home", correct: "at", size: 3, speech: "I finish work at five o'clock", simType: "leaving-work" },
+                    { id: 6, prefix: "", suffix: " 6:45 or 7:00. I read", correct: "at", size: 3, speech: "I get home at six forty-five or seven o'clock", simType: "get-home" },
+                    { id: 7, prefix: "in the evening. I go to bed", suffix: " 10:00.", correct: "at", size: 3, speech: "I read in the evening", simType: "going-bed" }
+                ]
+            }
+        };
+
+        let currentEmailKey = "sandra";
+        let activeInputId = 0;
+        let speechRate = 0.85;
+
+        // Custom Audio Synthesizer (Web Audio API)
+        function playSfx(type) {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+
+                if (type === 'tick') {
+                    // Quick vintage typewriter click sound
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(1000, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.04, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.03);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.03);
+
+                } else if (type === 'bell') {
+                    // Carriage bell chime
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.frequency.setValueAtTime(1200, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.15);
+
+                } else if (type === 'error') {
+                    // Low error buzz
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(140, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.25);
+
+                } else if (type === 'complete') {
+                    // Upbeat success fanfare
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, i) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.frequency.setValueAtTime(freq, ctx.currentTime + (i * 0.08));
+                        gain.gain.setValueAtTime(0.1, ctx.currentTime + (i * 0.08));
+                        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + (i * 0.08) + 0.2);
+                        osc.start(ctx.currentTime + (i * 0.08));
+                        osc.stop(ctx.currentTime + (i * 0.08) + 0.2);
+                    });
+                }
+            } catch (e) {
+                console.warn('Audio Context loaded.');
+            }
+        }
+
+        // Initialize / Switch Email Viewports
+        function switchEmailContext(emailKey) {
+            currentEmailKey = emailKey;
+            activeInputId = 0;
+            initLevel();
+        }
+
+        // Setup Interactive Level content
+        function initLevel() {
+            const data = emailsDatabase[currentEmailKey];
+
+            // Setup Header labels
+            document.getElementById('toMailLabel').textContent = data.targetMail;
+            document.getElementById('subjectMailLabel').textContent = data.subjectMail;
+            document.getElementById('levelNameIndicator').textContent = data.levelLabel;
+
+            // Draw Interactive text containing gaps
+            drawInteractiveGaps(data.gaps);
+
+            // Set current progression bar value
+            updateProgressBar();
+
+            // Set initial active text input highlight
+            focusInputGap(activeInputId);
+        }
+
+        // Redraw interactive gap sentences list
+        function drawInteractiveGaps(gaps) {
+            const container = document.getElementById('passageInteractiveSandbox');
+            container.innerHTML = '';
+
+            gaps.forEach((g) => {
+                const sentenceWrapper = document.createElement('span');
+                sentenceWrapper.className = "mr-1";
+
+                // Add preceding text
+                if (g.prefix) {
+                    sentenceWrapper.appendChild(document.createTextNode(g.prefix + " "));
+                }
+
+                // Add interactive text input box
+                const input = document.createElement('input');
+                input.type = "text";
+                input.id = `gap-${g.id}`;
+                input.placeholder = "?";
+                input.size = g.size;
+                input.maxLength = 10;
+                input.className = "border-2 border-slate-300 focus:border-blue-500 rounded-lg px-2.5 py-0.5 text-center font-black transition-all mx-1 uppercase tracking-wide inline-block outline-none text-slate-800 bg-white shadow-inner";
+                
+                // Block native touch corrections so spelling challenge is clean on mobiles
+                input.setAttribute('autocapitalize', 'none');
+                input.setAttribute('autocomplete', 'off');
+                input.setAttribute('spellcheck', 'false');
+
+                // Bind events
+                input.onfocus = () => focusInputGap(g.id);
+                input.oninput = () => evaluateTypingInput(g.id, input);
+
+                sentenceWrapper.appendChild(input);
+
+                // Add suffix text
+                if (g.suffix) {
+                    sentenceWrapper.appendChild(document.createTextNode(" " + g.suffix));
+                }
+
+                container.appendChild(sentenceWrapper);
+            });
+        }
+
+        // Handle focus highlight and load relevant cartoon display
+        function focusInputGap(id) {
+            activeInputId = id;
+            const data = emailsDatabase[currentEmailKey];
+            const gap = data.gaps.find(g => g.id === id);
+
+            if (!gap) return;
+
+            // Update focused class highlights
+            data.gaps.forEach(g => {
+                const el = document.getElementById(`gap-${g.id}`);
+                if (el) {
+                    if (g.id === id) {
+                        el.classList.add('active-input-highlight');
+                        el.focus();
+                    } else if (!el.disabled) {
+                        el.classList.remove('active-input-highlight');
+                    }
+                }
+            });
+
+            // Set corresponding visual cartoon sandbox SVG display
+            drawCartoonSandbox(gap.simType);
+        }
+
+        // Realtime typings verification checker
+        function evaluateTypingInput(id, inputElement) {
+            const data = emailsDatabase[currentEmailKey];
+            const gap = data.gaps.find(g => g.id === id);
+            if (!gap) return;
+
+            // Tick typewriter sound
+            playSfx('tick');
+
+            const value = inputElement.value.trim().toLowerCase();
+
+            if (value === gap.correct.toLowerCase()) {
+                // CORRECT CHIME
+                playSfx('bell');
+
+                // Set resolved layout classes
+                inputElement.disabled = true;
+                inputElement.className = "border-2 border-emerald-500 solved-input-highlight rounded-lg px-2.5 py-0.5 text-center font-black mx-1 uppercase tracking-wide inline-block outline-none";
+                inputElement.value = gap.correct.toUpperCase();
+
+                // Trigger active cartoon event inside animation sandbox
+                animateRoutineEvent(gap.simType);
+
+                // Read full clause verbally using SpeechSynthesis
+                speakPronunciationClause(gap.speech);
+
+                // Update progression bar
+                updateProgressBar();
+
+                // Advanced focus on to the next gap automatically
+                setTimeout(() => {
+                    const nextGap = data.gaps.find(g => g.id === id + 1);
+                    if (nextGap) {
+                        focusInputGap(id + 1);
+                    } else {
+                        // Check if all levels solved
+                        checkIfFullyCompleted();
+                    }
+                }, 1600);
+            }
+        }
+
+        // Word Bank Assist Trigger Handler
+        function fillActiveInputFromBank(preposition) {
+            const input = document.getElementById(`gap-${activeInputId}`);
+            if (input && !input.disabled) {
+                input.value = preposition;
+                evaluateTypingInput(activeInputId, input);
+            }
+        }
+
+        // Force Solve specific active input
+        function forceSolveActiveInput() {
+            const data = emailsDatabase[currentEmailKey];
+            const gap = data.gaps.find(g => g.id === activeInputId);
+            const input = document.getElementById(`gap-${activeInputId}`);
+
+            if (gap && input && !input.disabled) {
+                input.value = gap.correct;
+                evaluateTypingInput(activeInputId, input);
+            }
+        }
+
+        // Clear currently loaded email form gaps
+        function clearCurrentEmailInputs() {
+            const data = emailsDatabase[currentEmailKey];
+            data.gaps.forEach(g => {
+                const el = document.getElementById(`gap-${g.id}`);
+                if (el) {
+                    el.disabled = false;
+                    el.value = '';
+                    el.className = "border-2 border-slate-300 focus:border-blue-500 rounded-lg px-2.5 py-0.5 text-center font-black transition-all mx-1 uppercase tracking-wide inline-block outline-none text-slate-800 bg-white shadow-inner";
+                }
+            });
+            activeInputId = 0;
+            initLevel();
+        }
+
+        // Progression progress calculation
+        function updateProgressBar() {
+            const data = emailsDatabase[currentEmailKey];
+            let solvedCount = 0;
+
+            data.gaps.forEach(g => {
+                const el = document.getElementById(`gap-${g.id}`);
+                if (el && el.disabled) {
+                    solvedCount++;
+                }
+            });
+
+            const total = data.gaps.length;
+            const percentage = (solvedCount / total) * 100;
+
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+            document.getElementById('progressLabel').textContent = `${solvedCount} / ${total}`;
+        }
+
+        // Verify if entire email completed
+        function checkIfFullyCompleted() {
+            const data = emailsDatabase[currentEmailKey];
+            const allSolved = data.gaps.every(g => {
+                const el = document.getElementById(`gap-${g.id}`);
+                return el && el.disabled;
+            });
+
+            if (allSolved) {
+                playSfx('complete');
+                setTimeout(() => {
+                    document.getElementById('victoryModal').classList.remove('hidden');
+                }, 800);
+            }
+        }
+
+        // Draw dynamic SVGs matching time routine inside animation sandbox
+        function drawCartoonSandbox(simType) {
+            const sandbox = document.getElementById('animationSandbox');
+            sandbox.innerHTML = '';
+
+            const wrapper = document.createElement('div');
+            wrapper.className = "flex flex-col items-center justify-center p-3 w-full h-full";
+
+            if (simType === "morning-bell") {
+                // Clock Alarm setup
+                wrapper.innerHTML = `
+                    <svg id="svgAlarm" width="90" height="90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="55" r="35" fill="#ef4444" stroke="#b91c1c" stroke-width="4"/>
+                        <circle cx="50" cy="55" r="28" fill="#f8fafc"/>
+                        <!-- Clock Numbers -->
+                        <text x="50" y="38" text-anchor="middle" font-size="10" font-family="'Fredoka One'" fill="#1e293b" font-weight="bold">12</text>
+                        <text x="50" y="80" text-anchor="middle" font-size="10" font-family="'Fredoka One'" fill="#1e293b" font-weight="bold">6</text>
+                        <!-- Hands -->
+                        <line x1="50" y1="55" x2="50" y2="40" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+                        <line x1="50" y1="55" x2="65" y2="55" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+                        <!-- Bells on top -->
+                        <path d="M20 28 Q15 15, 30 15" fill="none" stroke="#b91c1c" stroke-width="6" stroke-linecap="round"/>
+                        <path d="M80 28 Q85 15, 70 15" fill="none" stroke="#b91c1c" stroke-width="6" stroke-linecap="round"/>
+                        <!-- Legs -->
+                        <line x1="25" y1="88" x2="15" y2="95" stroke="#334155" stroke-width="5" stroke-linecap="round"/>
+                        <line x1="75" y1="88" x2="85" y2="95" stroke="#334155" stroke-width="5" stroke-linecap="round"/>
+                    </svg>
+                    <span class="text-[10px] font-black text-slate-400 mt-1 uppercase tracking-wider">Morning Alarm</span>
+                `;
+            } else if (simType === "leaving-work") {
+                // Bus or office worker leaving
+                wrapper.innerHTML = `
+                    <div class="relative w-full h-full flex items-center justify-center">
+                        <svg width="120" height="90" viewBox="0 0 100 80">
+                            <!-- House structure -->
+                            <rect x="20" y="25" width="60" height="45" fill="#f1f5f9" stroke="#475569" stroke-width="4"/>
+                            <polygon points="15,25 50,2 85,25" fill="#f43f5e" stroke="#be123c" stroke-width="4"/>
+                            <!-- Swingable Door -->
+                            <rect id="officeDoor" x="42" y="42" width="16" height="28" fill="#b91c1c" stroke="#450a0a" stroke-width="2"/>
+                            <circle id="doorHandle" cx="45" cy="56" r="2" fill="#eab308"/>
+                        </svg>
+                        <div id="busSprite" class="absolute -left-[140px] opacity-0">
+                            <svg width="70" height="40" viewBox="0 0 70 40">
+                                <rect x="5" y="5" width="60" height="25" rx="6" fill="#eab308" stroke="#ca8a04" stroke-width="2"/>
+                                <rect x="12" y="10" width="10" height="10" fill="#93c5fd" rx="2"/>
+                                <rect x="28" y="10" width="10" height="10" fill="#93c5fd" rx="2"/>
+                                <circle cx="25" cy="46" r="6" fill="#1e293b"/>
+                                <circle cx="55" cy="56" r="6" fill="#1e293b"/>
+                            </svg>
+                        </div>
+                    </div>
+                `;
+            } else if (simType === "get-home") {
+                // House with windows glowing
+                wrapper.innerHTML = `
+                    <svg width="100" height="90" viewBox="0 0 100 80">
+                        <rect x="20" y="25" width="60" height="45" fill="#cbd5e1" stroke="#475569" stroke-width="4"/>
+                        <polygon points="15,25 50,2 85,25" fill="#475569" stroke="#334155" stroke-width="4"/>
+                        <!-- Windows glowing yellow -->
+                        <rect id="windowLight" x="28" y="36" width="14" height="14" rx="2" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+                        <rect id="windowLight2" x="58" y="36" width="14" height="14" rx="2" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+                        <rect x="44" y="46" width="12" height="24" fill="#7f1d1d"/>
+                    </svg>
+                    <span class="text-[10px] font-black text-slate-400 mt-1 uppercase tracking-wider">Returning Home</span>
+                `;
+            } else if (simType === "coffee-cup" || simType === "eating-lunch") {
+                // Coffee or lunch plate setup
+                wrapper.innerHTML = `
+                    <svg width="100" height="90" viewBox="0 0 100 100">
+                        <path id="steam1" d="M35 25 Q30 15 35 5" fill="none" stroke="#94a3b8" stroke-width="2" class="opacity-0"/>
+                        <path id="steam2" d="M50 25 Q45 15 50 5" fill="none" stroke="#94a3b8" stroke-width="2" class="opacity-0"/>
+                        <!-- Mug -->
+                        <rect x="25" y="30" width="50" height="50" rx="10" fill="#3b82f6" stroke="#1d4ed8" stroke-width="4"/>
+                        <!-- Mug Handle -->
+                        <path d="M75 40 Q85 40 85 55 Q85 70 75 70" fill="none" stroke="#1d4ed8" stroke-width="4"/>
+                        <!-- Liquid fills -->
+                        <rect id="mugLiquid" x="29" y="75" width="42" height="0" fill="#78350f" class="transition-all duration-1000"/>
+                    </svg>
+                    <span class="text-[10px] font-black text-slate-400 mt-1 uppercase tracking-wider">Afternoon Break</span>
+                `;
+            } else if (simType === "going-bed") {
+                // Bed under star lights
+                wrapper.innerHTML = `
+                    <svg width="100" height="90" viewBox="0 0 100 90">
+                        <!-- Moon & Stars -->
+                        <path d="M80 10 A8 8 0 0 0 72 18 A8 8 0 0 1 80 10 Z" fill="#eab308" transform="scale(1.2) translate(-10, 0)"/>
+                        <!-- Bed -->
+                        <rect x="15" y="55" width="70" height="15" fill="#475569" rx="3"/>
+                        <rect x="25" y="42" width="55" height="14" fill="#ffffff" rx="2" stroke="#cbd5e1" stroke-width="2"/>
+                        <!-- Pillow -->
+                        <rect x="20" y="45" width="12" height="8" rx="2" fill="#e2e8f0"/>
+                    </svg>
+                    <span class="text-[10px] font-black text-slate-400 mt-1 uppercase tracking-wider">Sleep Schedule</span>
+                `;
+            }
+
+            sandbox.appendChild(wrapper);
+        }
+
+        // Animate routine SVGs upon successful preposition typing
+        function animateRoutineEvent(simType) {
+            if (simType === "morning-bell") {
+                // Shake alarm clock bell vigorously
+                const svg = document.getElementById('svgAlarm');
+                if (svg) svg.classList.add('animate-ring');
+
+            } else if (simType === "leaving-work") {
+                // Swing door open
+                const door = document.getElementById('officeDoor');
+                const handle = document.getElementById('doorHandle');
+                if (door && handle) {
+                    door.setAttribute('width', '4');
+                    door.setAttribute('x', '54');
+                    handle.setAttribute('cx', '56');
+                }
+
+                // Slide city bus past screen
+                const bus = document.getElementById('busSprite');
+                if (bus) {
+                    bus.className = "absolute animate-bus opacity-100 duration-1000";
+                }
+
+            } else if (simType === "get-home") {
+                // Windows glow yellow
+                const w1 = document.getElementById('windowLight');
+                const w2 = document.getElementById('windowLight2');
+                if (w1 && w2) {
+                    w1.setAttribute('fill', '#fef08a');
+                    w2.setAttribute('fill', '#fef08a');
+                }
+
+            } else if (simType === "coffee-cup" || simType === "eating-lunch") {
+                // Mug fills up with hot tea / coffee
+                const liquid = document.getElementById('mugLiquid');
+                const s1 = document.getElementById('steam1');
+                const s2 = document.getElementById('steam2');
+
+                if (liquid) {
+                    liquid.setAttribute('height', '38');
+                    liquid.setAttribute('y', '36');
+                }
+
+                setTimeout(() => {
+                    if (s1 && s2) {
+                        s1.className = "animate-steam stroke-amber-400";
+                        s2.className = "animate-steam stroke-amber-400";
+                    }
+                }, 1000);
+            }
+        }
+
+        // TTS Vocal Clause reader
+        function speakPronunciationClause(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = speechRate;
+
+                // Animate voice tracking indicators
+                const bars = document.querySelectorAll('.wave-bar');
+                bars.forEach(b => b.style.animationPlayState = 'running');
+
+                utterance.onend = () => {
+                    bars.forEach(b => b.style.animationPlayState = 'paused');
+                };
+                utterance.onerror = () => {
+                    bars.forEach(b => b.style.animationPlayState = 'paused');
+                };
+
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Read active question clause context manually
+        function speakCompletedClause() {
+            const data = emailsDatabase[currentEmailKey];
+            const gap = data.gaps.find(g => g.id === activeInputId);
+            if (gap) {
+                speakPronunciationClause(gap.speech);
+            }
+        }
+
+        // Adjust speed sliders
+        function adjustSpeechRate(val) {
+            speechRate = parseFloat(val);
+        }
+
+        // Reset game stats
+        function restartGame() {
+            document.getElementById('victoryModal').classList.add('hidden');
+            clearCurrentEmailInputs();
+        }
+
+        // Self-contained iframe bootstrap initializer
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initLevel);
+        } else {
+            initLevel();
+        }
+    </script>
+</body>
+</html>
